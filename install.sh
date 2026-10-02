@@ -315,10 +315,16 @@ list_instances() {
     found=1
     local name; name="$(basename "$inst")"
     local hp="?" ver="?"
-    [[ -f "$inst/.env" ]] && hp="$(grep -E '^ODOO_HTTP_PORT=' "$inst/.env" | cut -d= -f2 || true)" && ver="$(grep -E '^ODOO_VERSION=' "$inst/.env" | cut -d= -f2 || true)"
+    if [[ -f "$inst/.env" ]]; then
+      hp="$(grep -E '^ODOO_HTTP_PORT=' "$inst/.env" | cut -d= -f2 || true)"
+      ver="$(grep -E '^ODOO_VERSION=' "$inst/.env" | cut -d= -f2 || true)"
+    fi
     printf '  %-24s Odoo %-3s HTTP %s\n' "$name" "$ver" "$hp"
   done
-  [[ $found -eq 1 ]] && echo
+  if [[ $found -eq 1 ]]; then
+    echo
+  fi
+  return 0
 }
 
 tune_hardware() {
