@@ -49,11 +49,50 @@ docker pull odoo:20
 docker build --build-arg BASE_IMAGE=odoo:20 -t "$PATCHED_IMAGE" "$PATCH_DIR"
 
 cp "$BASE/.env" "$BASE/.env.bak.$(date +%Y%m%d_%H%M%S)"
+cp "$BASE/compose.yaml" "$BASE/compose.yaml.bak.$(date +%Y%m%d_%H%M%S)"
+
 if grep -q '^ODOO_IMAGE=' "$BASE/.env"; then
   sed -i -E 's#^ODOO_IMAGE=.*$#ODOO_IMAGE=voltach/odoo:20-clipboard-fixed#' "$BASE/.env"
 else
   printf '\nODOO_IMAGE=voltach/odoo:20-clipboard-fixed\n' >> "$BASE/.env"
 fi
+
+python3 - "$BASE/compose.yaml" "$PATCHED_IMAGE" <<'PY'
+from pathlib import Path
+import sys
+
+path = Path(sys.argv[1])
+patched_image = sys.argv[2]
+lines = path.read_text().splitlines()
+
+in_web = False
+web_indent = None
+changed = False
+
+for i, line in enumerate(lines):
+    stripped = line.lstrip()
+    indent = len(line) - len(stripped)
+
+    if stripped == "web:" and indent == 2:
+        in_web = True
+        web_indent = indent
+        continue
+
+    if in_web:
+        if stripped and indent <= web_indent:
+            in_web = False
+            web_indent = None
+        elif stripped.startswith("image:") and indent == 4:
+            lines[i] = f"    image: {patched_image}"
+            changed = True
+            break
+
+if not changed:
+    raise SystemExit("Could not locate web.image in compose.yaml")
+
+path.write_text("\n".join(lines) + "\n")
+print(f"Updated web image in {path} -> {patched_image}")
+PY
 
 DB_NAME="$(grep -E '^INITIAL_DB_NAME=' "$BASE/.env" 2>/dev/null | cut -d= -f2- || true)"
 if [[ -z "$DB_NAME" ]]; then
@@ -63,12 +102,12 @@ fi
 cd "$BASE"
 
 echo "Resolved web image before recreation:"
-ODOO_IMAGE="$PATCHED_IMAGE" docker compose config | awk '
+docker compose config | awk '
   /^  web:$/ {in_web=1; next}
   in_web && /^    image:/ {print; exit}
 '
 
-RESOLVED_IMAGE="$(ODOO_IMAGE="$PATCHED_IMAGE" docker compose config | awk '
+RESOLVED_IMAGE="$(docker compose config | awk '
   /^  web:$/ {in_web=1; next}
   in_web && /^    image:/ {sub(/^    image:[[:space:]]*/, ""); print; exit}
 ')"
@@ -79,7 +118,7 @@ if [[ "$RESOLVED_IMAGE" != "$PATCHED_IMAGE" ]]; then
   exit 1
 fi
 
-ODOO_IMAGE="$PATCHED_IMAGE" docker compose up -d --force-recreate web
+docker compose up -d --force-recreate web
 
 ACTIVE_IMAGE="$(docker inspect -f '{{.Config.Image}}' "voltach-odoo-${INSTANCE}")"
 if [[ "$ACTIVE_IMAGE" != "$PATCHED_IMAGE" ]]; then
