@@ -420,6 +420,17 @@ create_instance() {
   chmod 700 "$TARGET_DIR" "$TARGET_DIR/secrets"
   chmod 755 "$TARGET_DIR/etc/addons/${ODOO_VER_DOT}"
 
+  # Official Odoo images run as a non-root user (typically UID/GID 101).
+  # Ensure the bind-mounted data directory is writable or Odoo can return HTTP 500
+  # when creating sessions, filestore content, or other runtime data.
+  local odoo_uid odoo_gid
+  odoo_uid="$(docker run --rm --entrypoint sh "$ODOO_IMAGE" -c 'id -u odoo 2>/dev/null || id -u' 2>/dev/null || echo 101)"
+  odoo_gid="$(docker run --rm --entrypoint sh "$ODOO_IMAGE" -c 'id -g odoo 2>/dev/null || id -g' 2>/dev/null || echo 101)"
+  [[ "$odoo_uid" =~ ^[0-9]+$ ]] || odoo_uid=101
+  [[ "$odoo_gid" =~ ^[0-9]+$ ]] || odoo_gid=101
+  chown -R "$odoo_uid:$odoo_gid" "$TARGET_DIR/data"
+  chmod 750 "$TARGET_DIR/data"
+
   printf '%s\n' "$POSTGRES_PASSWORD" > "$TARGET_DIR/secrets/postgresql_password"
   printf '%s\n' "$ODOO_MASTER_PASSWORD" > "$TARGET_DIR/secrets/odoo_master_password"
   chmod 600 "$TARGET_DIR/secrets/"*
