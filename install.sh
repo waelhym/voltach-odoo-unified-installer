@@ -39,6 +39,7 @@ POSTGRES_PASSWORD=""
 POSTGRES_DB="postgres"
 ODOO_MASTER_PASSWORD=""
 ODOO_MASTER_HASH=""
+INITIAL_DB_NAME=""
 WORKERS_COUNT=2
 SHARED_BUFFERS="256MB"
 EFFECTIVE_CACHE_SIZE="768MB"
@@ -403,6 +404,11 @@ select_odoo() {
   TARGET_DIR="${INSTANCES_DIR}/${INSTANCE_NAME}"
   [[ ! -e "$TARGET_DIR" ]] || die "Instance path already exists: ${TARGET_DIR}"
 
+  local default_db
+  default_db="${INSTANCE_NAME//[-.]/_}"
+  read_tty "Initial database name [${default_db}]: " INITIAL_DB_NAME "$default_db"
+  [[ "$INITIAL_DB_NAME" =~ ^[a-zA-Z0-9_]+$ ]] || die "Database name may contain only letters, numbers, and underscore."
+
   tune_hardware
   POSTGRES_PASSWORD="$(new_secret)"
   echo
@@ -490,6 +496,7 @@ POSTGRES_EXTERNAL_PORT=${DB_PORT}
 POSTGRES_USER=${POSTGRES_USER}
 POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 POSTGRES_DB=${POSTGRES_DB}
+INITIAL_DB_NAME=${INITIAL_DB_NAME}
 SHARED_BUFFERS=${SHARED_BUFFERS}
 EFFECTIVE_CACHE_SIZE=${EFFECTIVE_CACHE_SIZE}
 WORK_MEM=${WORK_MEM}
@@ -565,27 +572,56 @@ networks:
 COMPOSE
 
   (cd "$TARGET_DIR" && docker compose config >/dev/null)
-  info "Starting ${INSTANCE_NAME}..."
-  (cd "$TARGET_DIR" && docker compose pull && docker compose up -d)
 
-  # Repair runtime ownership from inside the running container.
-  # This is more reliable than assuming a fixed host UID/GID across Odoo images.
+  info "Starting PostgreSQL for ${INSTANCE_NAME}..."
+  (cd "$TARGET_DIR" && docker compose pull && docker compose up -d db)
+
+  info "Waiting for PostgreSQL health check..."
+  local db_ready=0
+  for _ in {1..60}; do
+    if [[ "$(docker inspect -f '{{.State.Health.Status}}' "voltach-db-${INSTANCE_NAME}" 2>/dev/null || true)" == "healthy" ]]; then
+      db_ready=1
+      break
+    fi
+    sleep 2
+  done
+  [[ $db_ready -eq 1 ]] || die "PostgreSQL did not become healthy in time."
+
+  info "Preparing Odoo data directory..."
+  mkdir -p "$TARGET_DIR/data/sessions"
+  chown -R "$odoo_uid:$odoo_gid" "$TARGET_DIR/data"
+  chmod 750 "$TARGET_DIR/data"
+  chmod 700 "$TARGET_DIR/data/sessions"
+
+  info "Creating initial Odoo database: ${INITIAL_DB_NAME}..."
+  (
+    cd "$TARGET_DIR"
+    docker compose run --rm --no-deps web       odoo --config /etc/odoo/odoo.conf       --stop-after-init       -d "$INITIAL_DB_NAME"       -i base       --without-demo=all
+  )
+
+  info "Disabling interactive tours in ${INITIAL_DB_NAME}..."
+  printf "%s\n" \
+    "m=env.registry.models.get('web_tour.tour'); m and env['web_tour.tour'].search([]).write({'active': False}); u=env['res.users'].search([]); 'tour_enabled' in u._fields and u.write({'tour_enabled': False}); env.cr.commit()" \
+    | (
+        cd "$TARGET_DIR"
+        docker compose run --rm --no-deps -T web           odoo shell --config /etc/odoo/odoo.conf -d "$INITIAL_DB_NAME" --no-http
+      )
+
+  info "Starting Odoo ${INSTANCE_NAME}..."
+  (cd "$TARGET_DIR" && docker compose up -d web)
+
+  # Final permission repair from inside the running container.
   docker exec -u 0 "voltach-odoo-${INSTANCE_NAME}" sh -lc '
     mkdir -p /var/lib/odoo/sessions
     if id odoo >/dev/null 2>&1; then
       chown -R odoo:odoo /var/lib/odoo
-      chmod 700 /var/lib/odoo/sessions
-    else
-      uid="$(stat -c %u /proc/1)"
-      gid="$(stat -c %g /proc/1)"
-      chown -R "$uid:$gid" /var/lib/odoo
       chmod 700 /var/lib/odoo/sessions
     fi
   '
   docker restart "voltach-odoo-${INSTANCE_NAME}" >/dev/null
 
   unset ODOO_MASTER_HASH ODOO_MASTER_PASSWORD POSTGRES_PASSWORD
-  success "Odoo instance started."
+  success "Odoo instance and initial database are ready."
 }
 
 install_cli() {
@@ -651,6 +687,7 @@ summary() {
   if [[ $INSTALL_ODOO -eq 1 ]]; then
     echo "Odoo ${ODOO_VERSION}:              http://${ip}:${HTTP_PORT}"
     echo "Instance:              ${INSTANCE_NAME}"
+    echo "Database:              ${INITIAL_DB_NAME}"
     echo "Root:                  ${TARGET_DIR}"
     echo "Custom addons:         ${TARGET_DIR}/etc/addons/${ODOO_VER_DOT}/"
     echo "PostgreSQL:            17 + pgvector (loopback ${DB_PORT})"
