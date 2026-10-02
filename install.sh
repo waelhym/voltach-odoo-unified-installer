@@ -10,7 +10,7 @@
 set -Eeuo pipefail
 IFS=$'\n\t'
 
-VERSION="1.1.1"
+VERSION="1.1.2"
 LOG_FILE="/var/log/voltach-unified-installer.log"
 BASE_DIR="/opt/voltach-odoo"
 INSTANCES_DIR="${BASE_DIR}/instances"
@@ -644,7 +644,7 @@ services:
       - internal
 
   web:
-    image: ${ODOO_IMAGE}
+    image: \${ODOO_IMAGE}
     container_name: voltach-odoo-${INSTANCE_NAME}
     restart: unless-stopped
     command: ["--config", "/etc/odoo/odoo.conf"]
