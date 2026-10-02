@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.3 - 2026-10-03
+
+- Added browser-side protection against accidental `debug=tests` and `debug=assets,tests` sessions.
+- Preserve normal Developer Mode while automatically removing only the `tests` debug token.
+- Continue clearing stale `web_tour` localStorage state on backend load.
+- Document safe Odoo URLs and test-mode URLs to avoid in production.
+
 ## 1.1.0 - 2026-10-02
 
 - Prevent stale Odoo onboarding tours from causing `TourInteractive` JavaScript errors.
