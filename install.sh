@@ -10,7 +10,7 @@
 set -Eeuo pipefail
 IFS=$'\n\t'
 
-VERSION="1.1.2"
+VERSION="1.1.3"
 LOG_FILE="/var/log/voltach-unified-installer.log"
 BASE_DIR="/opt/voltach-odoo"
 INSTANCES_DIR="${BASE_DIR}/instances"
@@ -506,8 +506,8 @@ PY
   cat > "$bootstrap_addon/__manifest__.py" <<'PY'
 {
     "name": "Voltach Bootstrap Fix",
-    "version": "1.0.0",
-    "summary": "Clears stale Odoo onboarding tour state",
+    "version": "1.1.0",
+    "summary": "Clears stale Odoo tour state and protects normal sessions from test debug mode",
     "depends": ["web"],
     "assets": {
         "web.assets_backend": [
@@ -535,6 +535,32 @@ for (const key of TOUR_KEYS) {
     } catch {
         // Ignore browsers/storage contexts where localStorage is unavailable.
     }
+}
+
+// Odoo test/debug bundles load web_tour helper modules intended for test
+// environments. On normal HTTP deployments this can trigger clipboard and
+// TourInteractive errors. Keep normal Developer Mode available while
+// automatically removing the "tests" debug token from ordinary sessions.
+try {
+    const url = new URL(window.location.href);
+    const debug = url.searchParams.get("debug");
+    if (debug) {
+        const tokens = debug
+            .split(",")
+            .map((token) => token.trim())
+            .filter(Boolean);
+
+        if (tokens.includes("tests")) {
+            const filtered = tokens.filter((token) => token !== "tests");
+
+            // If only tests was requested, fall back to normal Developer Mode.
+            url.searchParams.set("debug", filtered.length ? filtered.join(",") : "1");
+
+            window.location.replace(url.toString());
+        }
+    }
+} catch {
+    // Never block the Odoo client if URL normalization fails.
 }
 JS
   chown -R "$odoo_uid:$odoo_gid" "$bootstrap_addon"
