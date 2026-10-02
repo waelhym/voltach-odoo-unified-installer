@@ -48,8 +48,12 @@ DOCKERFILE
 docker pull odoo:20
 docker build --build-arg BASE_IMAGE=odoo:20 -t "$PATCHED_IMAGE" "$PATCH_DIR"
 
-cp "$BASE/compose.yaml" "$BASE/compose.yaml.bak.$(date +%Y%m%d_%H%M%S)"
-sed -i -E 's#^[[:space:]]*image:[[:space:]]*odoo:20[[:space:]]*$#    image: voltach/odoo:20-clipboard-fixed#' "$BASE/compose.yaml"
+cp "$BASE/.env" "$BASE/.env.bak.$(date +%Y%m%d_%H%M%S)"
+if grep -q '^ODOO_IMAGE=' "$BASE/.env"; then
+  sed -i -E 's#^ODOO_IMAGE=.*$#ODOO_IMAGE=voltach/odoo:20-clipboard-fixed#' "$BASE/.env"
+else
+  printf '\nODOO_IMAGE=voltach/odoo:20-clipboard-fixed\n' >> "$BASE/.env"
+fi
 
 DB_NAME="$(grep -E '^INITIAL_DB_NAME=' "$BASE/.env" 2>/dev/null | cut -d= -f2- || true)"
 if [[ -z "$DB_NAME" ]]; then
@@ -57,7 +61,20 @@ if [[ -z "$DB_NAME" ]]; then
 fi
 
 cd "$BASE"
+docker compose config | grep -A4 -E '^  web:' || true
 docker compose up -d --force-recreate web
+
+ACTIVE_IMAGE="$(docker inspect -f '{{.Config.Image}}' "voltach-odoo-${INSTANCE}")"
+if [[ "$ACTIVE_IMAGE" != "$PATCHED_IMAGE" ]]; then
+  echo "ERROR: Odoo container is still using: $ACTIVE_IMAGE" >&2
+  echo "Expected: $PATCHED_IMAGE" >&2
+  exit 1
+fi
+
+echo "Confirmed active image: $ACTIVE_IMAGE"
+
+docker exec "voltach-odoo-${INSTANCE}" sh -lc \
+  "grep -n 'originalClipboardWriteText' /usr/lib/python3/dist-packages/odoo/addons/web_tour/static/src/tour_helpers/tour_helpers_clipboard.js | head"
 
 if [[ -n "$DB_NAME" ]]; then
   docker exec -i "voltach-odoo-${INSTANCE}" odoo shell -d "$DB_NAME" --no-http <<'PY'
