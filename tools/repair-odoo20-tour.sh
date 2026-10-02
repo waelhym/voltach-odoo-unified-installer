@@ -61,8 +61,25 @@ if [[ -z "$DB_NAME" ]]; then
 fi
 
 cd "$BASE"
-docker compose config | grep -A4 -E '^  web:' || true
-docker compose up -d --force-recreate web
+
+echo "Resolved web image before recreation:"
+ODOO_IMAGE="$PATCHED_IMAGE" docker compose config | awk '
+  /^  web:$/ {in_web=1; next}
+  in_web && /^    image:/ {print; exit}
+'
+
+RESOLVED_IMAGE="$(ODOO_IMAGE="$PATCHED_IMAGE" docker compose config | awk '
+  /^  web:$/ {in_web=1; next}
+  in_web && /^    image:/ {sub(/^    image:[[:space:]]*/, ""); print; exit}
+')"
+
+if [[ "$RESOLVED_IMAGE" != "$PATCHED_IMAGE" ]]; then
+  echo "ERROR: docker compose resolves web image as: $RESOLVED_IMAGE" >&2
+  echo "Expected: $PATCHED_IMAGE" >&2
+  exit 1
+fi
+
+ODOO_IMAGE="$PATCHED_IMAGE" docker compose up -d --force-recreate web
 
 ACTIVE_IMAGE="$(docker inspect -f '{{.Config.Image}}' "voltach-odoo-${INSTANCE}")"
 if [[ "$ACTIVE_IMAGE" != "$PATCHED_IMAGE" ]]; then
