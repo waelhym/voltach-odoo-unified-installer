@@ -95,9 +95,31 @@ print(f"Updated web image in {path} -> {patched_image}")
 PY
 
 DB_NAME="$(grep -E '^INITIAL_DB_NAME=' "$BASE/.env" 2>/dev/null | cut -d= -f2- || true)"
-if [[ -z "$DB_NAME" ]]; then
-  DB_NAME="$(docker exec "voltach-db-${INSTANCE}" psql -U odoo -Atc "SELECT datname FROM pg_database WHERE datname NOT IN ('postgres','template0','template1') ORDER BY datname LIMIT 1;" postgres)"
+
+db_exists() {
+  local name="$1"
+  [[ -n "$name" ]] || return 1
+  docker exec "voltach-db-${INSTANCE}" psql -U odoo -d postgres -Atc \
+    "SELECT 1 FROM pg_database WHERE datname = '${name//\'/\'\'}' LIMIT 1;" \
+    | grep -qx '1'
+}
+
+if ! db_exists "$DB_NAME"; then
+  DB_NAME="$(docker exec "voltach-db-${INSTANCE}" psql -U odoo -d postgres -Atc \
+    "SELECT datname
+       FROM pg_database
+      WHERE datname NOT IN ('postgres','template0','template1')
+        AND datallowconn = true
+      ORDER BY datname
+      LIMIT 1;")"
 fi
+
+[[ -n "$DB_NAME" ]] || {
+  echo "ERROR: No Odoo database found in voltach-db-${INSTANCE}" >&2
+  exit 1
+}
+
+echo "Using database: $DB_NAME"
 
 cd "$BASE"
 
