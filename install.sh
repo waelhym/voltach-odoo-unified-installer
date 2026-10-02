@@ -10,7 +10,7 @@
 set -Eeuo pipefail
 IFS=$'\n\t'
 
-VERSION="1.1.0"
+VERSION="1.1.1"
 LOG_FILE="/var/log/voltach-unified-installer.log"
 BASE_DIR="/opt/voltach-odoo"
 INSTANCES_DIR="${BASE_DIR}/instances"
@@ -368,6 +368,62 @@ resolve_image() {
   docker image inspect "$ODOO_IMAGE" >/dev/null 2>&1 || docker pull "$ODOO_IMAGE"
 }
 
+prepare_odoo20_clipboard_patch() {
+  [[ "$ODOO_VERSION" == "20" ]] || return 0
+
+  local source_image="$ODOO_IMAGE"
+  local patch_dir="${BASE_DIR}/image-patches/odoo20-clipboard"
+  local patched_image="voltach/odoo:20-clipboard-fixed"
+
+  # Patch only images that actually contain the Odoo 20 web_tour helper.
+  if ! docker run --rm --entrypoint sh "$source_image" -lc \
+    'test -f /usr/lib/python3/dist-packages/odoo/addons/web_tour/static/src/tour_helpers/tour_helpers_clipboard.js'; then
+    warn "Odoo 20 clipboard helper not found in ${source_image}; skipping compatibility patch."
+    return 0
+  fi
+
+  info "Building Odoo 20 compatibility image for HTTP/clipboard-safe web_tour..."
+  mkdir -p "$patch_dir"
+
+  cat > "$patch_dir/Dockerfile" <<'DOCKERFILE'
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+USER root
+RUN python3 - <<'PY'
+from pathlib import Path
+
+p = Path("/usr/lib/python3/dist-packages/odoo/addons/web_tour/static/src/tour_helpers/tour_helpers_clipboard.js")
+s = p.read_text()
+
+s = s.replace(
+    "const originalClipboardWriteText = window.navigator.clipboard.writeText;",
+    "const originalClipboardWriteText = window.navigator.clipboard?.writeText?.bind(window.navigator.clipboard);"
+)
+
+s = s.replace(
+    "        window.navigator.clipboard.writeText = () => Promise.resolve();",
+    "        if (window.navigator.clipboard) {\n            window.navigator.clipboard.writeText = () => Promise.resolve();\n        }"
+)
+
+s = s.replace(
+    "        window.navigator.clipboard.writeText = originalClipboardWriteText;",
+    "        if (window.navigator.clipboard && originalClipboardWriteText) {\n            window.navigator.clipboard.writeText = originalClipboardWriteText;\n        }"
+)
+
+p.write_text(s)
+PY
+USER odoo
+DOCKERFILE
+
+  docker build \
+    --build-arg BASE_IMAGE="$source_image" \
+    -t "$patched_image" \
+    "$patch_dir"
+
+  ODOO_IMAGE="$patched_image"
+  success "Using patched Odoo image: ${ODOO_IMAGE}"
+}
+
 select_odoo() {
   echo
   echo -e "${BOLD}Existing unified instances:${NC}"
@@ -396,6 +452,8 @@ select_odoo() {
       ;;
     *) version=18; resolve_image "$version" ;;
   esac
+
+  prepare_odoo20_clipboard_patch
 
   allocate_ports "$version"
   local default_name; default_name="$(auto_name "$version")"
