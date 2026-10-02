@@ -259,7 +259,10 @@ install_portainer() {
     return
   fi
 
-  local dir="/opt/portainer" secret_dir="$dir/secrets" password_file="$dir/secrets/admin_password" admin_password=""
+  local dir="/opt/portainer"
+  local secret_dir="$dir/secrets"
+  local password_file="$dir/secrets/admin_password"
+  local admin_password=""
   mkdir -p "$secret_dir" && chmod 700 "$dir" "$secret_dir"
   if [[ ! -s "$password_file" ]]; then
     echo
@@ -303,7 +306,9 @@ allocate_ports() {
 }
 
 auto_name() {
-  local ver="$1" base="odoo${ver}" n=1
+  local ver="$1"
+  local base="odoo${ver}"
+  local n=1
   while [[ -d "${INSTANCES_DIR}/${base}-${n}" ]]; do ((n+=1)); done
   printf '%s\n' "${base}-${n}"
 }
@@ -342,7 +347,9 @@ tune_hardware() {
 }
 
 resolve_image() {
-  local version="$1" candidate="odoo:${version}" custom=""
+  local version="$1"
+  local candidate="odoo:${version}"
+  local custom=""
   ODOO_VERSION="$version"
   ODOO_VER_DOT="${version}.0"
 
