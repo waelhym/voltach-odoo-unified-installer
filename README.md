@@ -37,3 +37,27 @@ The installer is designed to avoid exposing PostgreSQL publicly. Review firewall
 ## License
 
 MIT. See `LICENSE`.
+
+
+## Safe Odoo URLs
+
+For normal use:
+
+```text
+http://SERVER_IP:ODOO_PORT/odoo
+```
+
+For standard Developer Mode:
+
+```text
+http://SERVER_IP:ODOO_PORT/odoo?debug=1
+```
+
+Avoid using test-mode URLs such as:
+
+```text
+?debug=tests
+?debug=assets,tests
+```
+
+The installer adds a small backend safety addon that clears stale tour state and automatically removes the `tests` debug token from normal browser sessions.
