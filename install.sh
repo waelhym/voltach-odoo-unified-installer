@@ -567,6 +567,23 @@ COMPOSE
   (cd "$TARGET_DIR" && docker compose config >/dev/null)
   info "Starting ${INSTANCE_NAME}..."
   (cd "$TARGET_DIR" && docker compose pull && docker compose up -d)
+
+  # Repair runtime ownership from inside the running container.
+  # This is more reliable than assuming a fixed host UID/GID across Odoo images.
+  docker exec -u 0 "voltach-odoo-${INSTANCE_NAME}" sh -lc '
+    mkdir -p /var/lib/odoo/sessions
+    if id odoo >/dev/null 2>&1; then
+      chown -R odoo:odoo /var/lib/odoo
+      chmod 700 /var/lib/odoo/sessions
+    else
+      uid="$(stat -c %u /proc/1)"
+      gid="$(stat -c %g /proc/1)"
+      chown -R "$uid:$gid" /var/lib/odoo
+      chmod 700 /var/lib/odoo/sessions
+    fi
+  '
+  docker restart "voltach-odoo-${INSTANCE_NAME}" >/dev/null
+
   unset ODOO_MASTER_HASH ODOO_MASTER_PASSWORD POSTGRES_PASSWORD
   success "Odoo instance started."
 }
