@@ -370,7 +370,7 @@ select_odoo() {
     1) version=20; resolve_image "$version" ;;
     2) version=19; resolve_image "$version" ;;
     3) version=18; resolve_image "$version" ;;
-    4) version=17; resolve_imae "$version" ;;
+    4) version=17; resolve_image "$version" ;;
     5) version=16; resolve_image "$version" ;;
     6)
       read_tty "Odoo major version [16-20]: " custom_version "18"
@@ -418,4 +418,220 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 \c template1
 CREATE EXTENSION IF NOT EXISTS vector;
-CREATE EXTENSION IF NOT EXISTS unaccentçC°¤5$TDRUDTå4ôâbäõBU5E2'WVBÖ÷77#°¤5$TDRUDTå4ôâbäõBU5E2u÷G&vÓ°¥5À ¢6Bâ"ED$tUEôD"öWF2ööFöòæ6öæb"ÃÄôDôõô4ôä`¥¶÷Föç5Ð¦FÖå÷77vBÒG´ôDôõôÔ5DU%ô4Ð¦F%ö÷7BÒF ¦F%÷÷'BÒSC3 ¦F%÷W6W"ÒGµõ5Du$U5õU4U'Ð¦F%÷77v÷&BÒGµõ5Du$U5õ55tõ$GÐ¦F%öæÖRÐ¦F%öÖ6öæâÒc@¦F&fÇFW"Òâ ¦Æ7EöF"ÒG'VP§&÷öÖöFRÒG'VP¦GGöçFW&f6RÒããã ¦GG÷÷'BÒc¦vWfVçE÷÷'BÒs ¦FFöç5÷FÒöÖçBöWG&ÖFFöç2òG´ôDôõõdU%ôDõGÒÂ÷W7"öÆ"÷Föã2öF7B×6¶vW2ööFöòöFFöç0¦FFöF"Ò÷f"öÆ"ööFöð§v÷&¶W'2ÒGµtõ$´U%5ô4õTåGÐ¦Öö7&öå÷F&VG2Ò ¦ÆÖEöÖVÖ÷'ö&BÒ#cC3SCSc ¦ÆÖEöÖVÖ÷'÷6ögBÒ#CsC3cC¦ÆÖE÷&WVW7BÒ ¦ÆÖE÷FÖUö7RÒc ¦ÆÖE÷FÖU÷&VÂÒ# ¦ÆÖE÷FÖU÷&VÅö7&öâÒ ¦ÆöuöÆWfVÂÒæfð¤ôDôõô4ôä`¢6ÖöBcCB"ED$tUEôD"öWF2ööFöòæ6öæb  ¢6Bâ"ED$tUEôD"òæVçb"ÃÄTå`¤4ôÕõ4Uõ$ô¤T5EôäÔS×föÇF6òBV6ò"Då5Dä4UôäÔR"ÂG"râÒruõòr¤å5Dä4UôäÔSÒG´å5Dä4UôäÔWÐ¤ôDôõõdU%4ôãÒG´ôDôõõdU%4ôçÐ¤ôDôõõdU%ôDõCÒG´ôDôõõdU%ôDõGÐ¤ôDôõôÔtSÒG´ôDôõôÔtWÐ¥õ5Du$U5ôÔtSÒGµuôÔtWÐ¤ôDôõôEEõõ%CÒG´EEõõ%GÐ¤ôDôõô4Eõõ%CÒG´4Eõõ%GÐ¥õ5Du$U5ôUDU$äÅõõ%CÒG´D%õõ%GÐ¥õ5Du$U5õU4U#ÒGµõ5Du$U5õU4U'Ð¥õ5Du$U5õ55tõ$CÒGµõ5Du$U5õ55tõ$GÐ¥õ5Du$U5ôD#ÒGµõ5Du$U5ôD'Ð¥4$TEô%TddU%3ÒGµ4$TEô%TddU%7Ð¤TddT5DdUô44Uõ4¤SÒG´TddT5DdUô44Uõ4¤WÐ¥tõ$µôÔTÓÒGµtõ$µôÔT×Ð¤ÔåDTää4Uõtõ$µôÔTÓÒG´ÔåDTää4Uõtõ$µôÔT×Ð¤Tå`¢6ÖöBc"ED$tUEôD"òæVçb  ¢Vç7W&U÷&÷öæWGv÷&°¢6Bâ"ED$tUEôD"ö6ö×÷6RçÖÂ"ÃÄ4ôÕõ4P§6W'f6W3 ¢F# ¢ÖvS¢GµuôÔtWÐ¢6öçFæW%öæÖS¢föÇF6ÖF"ÒG´å5Dä4UôäÔWÐ¢&W7F'C¢VæÆW72×7F÷V@¢6öÖÖæC¢à¢÷7Fw&W0¢Ö26&VEö'VffW'3ÒGµ4$TEô%TddU%7Ð¢Ö2VffV7FfUö66U÷6¦SÒG´TddT5DdUô44Uõ4¤WÐ¢Ö2v÷&µöÖVÓÒGµtõ$µôÔT×Ð¢Ö2ÖçFVææ6U÷v÷&µöÖVÓÒG´ÔåDTää4Uõtõ$µôÔT×Ð¢Ö2Öö6öææV7Föç3Ó# ¢Ö2&æFöÕ÷vUö6÷7CÓã¢Ö26V6·öçEö6ö×ÆWFöå÷F&vWCÓã¢Ö2vÅö'VffW'3ÓdÔ ¢Vçf&öæÖVçC ¢õ5Du$U5ôD#¢Gµõ5Du$U5ôD'Ð¢õ5Du$U5õU4U#¢Gµõ5Du$U5õU4U'Ð¢õ5Du$U5õ55tõ$C¢Gµõ5Du$U5õ55tõ$GÐ¢tDD¢÷f"öÆ"÷÷7Fw&W7ÂöFF÷vFF¢föÇVÖW3 ¢ÒâöF%öFF¢÷f"öÆ"÷÷7Fw&W7ÂöFF¢ÒâöæBÖF#¢öFö6¶W"ÖVçG'öçBÖæFF"æC§&ð¢÷'G3 ¢Ò##rããã¢G´D%õõ%GÓ£SC3" ¢VÇF6V6³ ¢FW7C¢²$4ÔBÕ4TÄÂ"Â'uö7&VGÕRGµõ5Du$U5õU4U'ÒÖBGµõ5Du$U5ôD'Ò%Ð¢çFW'fÃ¢W0¢FÖV÷WC¢W0¢&WG&W3¢# ¢7F'E÷W&öC¢W0¢æWGv÷&·3 ¢ÒçFW&æÀ ¢vV# ¢ÖvS¢G´ôDôõôÔtWÐ¢6öçFæW%öæÖS¢föÇF6ÖöFöòÒG´å5Dä4UôäÔWÐ¢&W7F'C¢VæÆW72×7F÷V@¢6öÖÖæC¢²"ÒÖ6öæfr"Â"öWF2ööFöòööFöòæ6öæb%Ð¢FWVæG5ööã ¢F# ¢6öæFFöã¢6W'f6UöVÇF¢Vçf&öæÖVçC ¢õ5C¢F ¢õ%C¢#SC3" ¢U4U#¢Gµõ5Du$U5õU4U'Ð¢55tõ$C¢Gµõ5Du$U5õ55tõ$GÐ¢÷'G3 ¢Ò"G´EEõõ%GÓ£c ¢Ò"G´4Eõõ%GÓ£s" ¢föÇVÖW3 ¢ÒâöWF2ööFöòæ6öæc¢öWF2ööFöòööFöòæ6öæc§&ð¢ÒâöWF2öFFöç2òG´ôDôõõdU%ôDõGÓ¢öÖçBöWG&ÖFFöç2òG´ôDôõõdU%ôDõGÐ¢ÒâöFF¢÷f"öÆ"ööFöð¢æWGv÷&·3 ¢ÒçFW&æÀ¢ÒGµ$õôäUEtõ$·Ð ¦æWGv÷&·3 ¢çFW&æÃ ¢çFW&æÃ¢G'VP¢Gµ$õôäUEtõ$·Ó ¢WFW&æÃ¢G'VP¤4ôÕõ4P ¢6B"ED$tUEôD""bbFö6¶W"6ö×÷6R6öæfrâöFWböçVÆÂ¢æfò%7F'FærG´å5Dä4UôäÔWÒâââ ¢6B"ED$tUEôD""bbFö6¶W"6ö×÷6RVÆÂbbFö6¶W"6ö×÷6RWÖB¢Vç6WBôDôõôÔ5DU%ô4ôDôõôÔ5DU%õ55tõ$Bõ5Du$U5õ55tõ$@¢7V66W72$öFöòç7Fæ6R7F'FVBâ §Ð ¦ç7FÆÅö6Æ°¢6Bâ"G´tÄô$Åô$çÒòG´4ÄôäÔWÒ"ÃÂt4Äp¢2÷W7"ö&âöVçb&6§6WBÖWVòVfÀ¤$4SÒ"ö÷B÷föÇF6ÖöFöòöç7Fæ6W2 ¦6ÖCÒ"G³¢ÖÆ7GÒ#²ç7CÒ"G³#¢×Ò ¦ÆÂ²µ²ÖB"D$4R"ÕÒbbfæB"D$4R"ÖÖæFWFÖÖFWF×GRB×&çFbrVeÆârÂ6÷'BÇÂG'VS²Ð§&W²µ²Öâ"Fç7B"bbÖB"D$4RòFç7B"ÕÒÇÂ²V6ò$ç7Fæ6Ræ÷Bf÷VæC¢G¶ç7C¢ÓÆæöæSçÒ"âc#²V6ò$fÆ&ÆS¢#²ÆÃ²WB²Ó²Ð¦Wb²w&WÔR%âG³ÓÒ""D$4RòC"òæVçb"#âöFWböçVÆÂÂ7WBÖCÒÖc"ÒÇÂG'VS²Ð¦66R"F6ÖB"à¢Æ7B¢&çFbrRÓ#G2RÓ2RÓ2RÓ2W5Æârå5Dä4RdU%4ôâEE4B5DEU0¢vÆR&VB×"²Fð¢µ²Öâ"G"ÕÒÇÂ6öçFçVP¢3Ò'7F÷VB#²Fö6¶W"2ÒÖf÷&ÖBw·²äæÖW7×ÒrÂw&W×'föÇF6ÖöFöòÒG"bb3Ò''Vææær ¢&çFbrRÓ#G2RÓ2RÓ2RÓ2W5Æâr"G""BWbôDôõõdU%4ôâ"G"""BWbôDôõôEEõõ%B"G"""BWbôDôõô4Eõõ%B"G"""G2 ¢FöæRÂÂÆÂ¢³°¢2Fö6¶W"2ÒÖf÷&ÖBwF&ÆR·²äæÖW7×ÕÇG·²å7FGW7×ÕÇG·²å÷'G7×ÒrÂw&WÔRwföÇF6ÒöFö÷ÆF"×ÄäÔU2r³°¢7F'GÇ7F÷Ç&W7F'B&W²6B"D$4RòFç7B"bbFö6¶W"6ö×÷6R"F6ÖB"³°¢Æöw2&W²6B"D$4RòFç7B"bbFö6¶W"6ö×÷6RÆöw2ÖbÒ×FÃÓ#³°¢æfò¢&W¢V6ò$ç7Fæ6S¢Fç7B ¢V6ò$öFöó¢BWbôDôõõdU%4ôâ"Fç7B" ¢V6ò$EE¢BWbôDôõôEEõõ%B"Fç7B" ¢V6ò$6C¢BWbôDôõô4Eõõ%B"Fç7B" ¢V6ò$D"Æö6Ã¢#rããã¢BWbõ5Du$U5ôUDU$äÅõõ%B"Fç7B" ¢V6ò$FFöç3¢D$4RòFç7BöWF2öFFöç2òBWbôDôõõdU%ôDõB"Fç7B" ¢V6ò$6öæfs¢D$4RòFç7BöWF2ööFöòæ6öæb ¢V6ò%6V7&WG3¢D$4RòFç7B÷6V7&WG2&ö÷BöæÇ ¢³°¢&6·W¢&W¢G3Ò"BFFR²UVÒVEòTTÒU2#²#Ò"D$4RòFç7Bö&6·W2#²Ö¶F"×"F" ¢SÒ"BWbõ5Du$U5õU4U""Fç7B" ¢Fö6¶W"WV2'föÇF6ÖF"ÒFç7B"uöGV×ÆÂÕR"GR"â"F"öF%òGG2ç7Â ¢F"Ö7¦b"F"ö&6·WòG¶ç7GÕòG·G7ÒçF"æw¢"Ô2"D$4RòFç7B"FFWF2&&6·W2öF%òGG2ç7Â ¢&ÒÖb"F"öF%òGG2ç7Â ¢V6ò"F"ö&6·WòG¶ç7GÕòG·G7ÒçF"æw¢ ¢³°¢¢V6ò%W6vS¢föÇF6ÖöFöò¶Æ7GÇ7Ç7F'GÇ7F÷Ç&W7F'GÆÆöw7Ææf÷Æ&6·WÒ¶ç7Fæ6UÒ"³°¦W60¤4Ä¢6ÖöB·"G´tÄô$Åô$çÒòG´4ÄôäÔWÒ ¢Æâ×6b"G´tÄô$Åô$çÒòG´4ÄôäÔWÒ""G´tÄô$Åô$çÒ÷föFöò ¢7V66W72$ÖævVÖVçB4Äç7FÆÆVC¢föÇF6ÖöFöòÆ3¢föFöòâ §Ð §6W'fW%ö°¢7W&Â×2ÓBÒÖÖ×FÖR2f6öæfræÖR#âöFWböçVÆÂÇÂ÷7FæÖRÔÂv²w·&çBCÒp§Ð §7VÖÖ'°¢Æö6Â²Ò"B6W'fW%ö ¢V6ð¢V6òÖR"G´u$TTçÒG´$ôÄGÔç7FÆÆFöâ6ö×ÆWFRâG´ä7Ò ¢µ²Då5DÄÅõtT$ÔâÖWÕÒbbV6ò%vV&Öã¢GG3¢òòG¶Ó£ ¢µ²Då5DÄÅôåÒÖWÕÒbbV6ò$ätå&÷ÖævW#¢GG¢òòG¶Ó£ ¢µ²Då5DÄÅõõ%DäU"ÖWÕÒbbV6ò%÷'FæW#¢GG3¢òòG¶Ó£CC2 ¢bµ²Då5DÄÅôôDôòÖWÕÓ²FVà¢V6ò$öFöòG´ôDôõõdU%4ôçÓ¢GG¢òòG¶Ó¢G´EEõõ%GÒ ¢V6ò$ç7Fæ6S¢G´å5Dä4UôäÔWÒ ¢V6ò%&ö÷C¢GµD$tUEôD'Ò ¢V6ò$7W7FöÒFFöç3¢GµD$tUEôD'ÒöWF2öFFöç2òG´ôDôõõdU%ôDõGÒò ¢V6ò%÷7Fw&U5Ã¢r²wfV7F÷"Æö÷&6²G´D%õõ%GÒ ¢V6ò$ÖævS¢föÇF6ÖöFöòÆ7B ¢f¢V6ò$Æös¢G´ÄôuôdÄWÒ ¢V6ð§Ð ¦Öâ°¢&ææW ¢&VfÆv@¢E÷&W&P¢ç7FÆÅöFö6¶W ¢ç7FÆÅ÷vV&Öà¢ç7FÆÅöçÐ¢ç7FÆÅ÷÷'FæW ¢bµ²Då5DÄÅôôDôòÖWÕÓ²FVà¢6VÆV7EööFöð¢7&VFUöç7Fæ6P¢ç7FÆÅö6Æ¢f¢7VÖÖ'§Ð ¦Öâ"D 
+CREATE EXTENSION IF NOT EXISTS unaccent;
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+SQL
+
+  cat > "$TARGET_DIR/etc/odoo.conf" <<ODOO_CONF
+[options]
+admin_passwd = ${ODOO_MASTER_HASH}
+db_host = db
+db_port = 5432
+db_user = ${POSTGRES_USER}
+db_password = ${POSTGRES_PASSWORD}
+db_name =
+db_maxconn = 64
+dbfilter = .*
+list_db = True
+proxy_mode = True
+http_interface = 0.0.0.0
+http_port = 8069
+gevent_port = 8072
+addons_path = /mnt/extra-addons/${ODOO_VER_DOT},/usr/lib/python3/dist-packages/odoo/addons
+data_dir = /var/lib/odoo
+workers = ${WORKERS_COUNT}
+max_cron_threads = 2
+limit_memory_hard = 2684354560
+limit_memory_soft = 2147483648
+limit_request = 8192
+limit_time_cpu = 600
+limit_time_real = 1200
+limit_time_real_cron = 1800
+log_level = info
+ODOO_CONF
+  chmod 644 "$TARGET_DIR/etc/odoo.conf"
+
+  cat > "$TARGET_DIR/.env" <<ENV
+COMPOSE_PROJECT_NAME=voltach_$(echo "$INSTANCE_NAME" | tr '.-' '__')
+INSTANCE_NAME=${INSTANCE_NAME}
+ODOO_VERSION=${ODOO_VERSION}
+ODOO_VER_DOT=${ODOO_VER_DOT}
+ODOO_IMAGE=${ODOO_IMAGE}
+POSTGRES_IMAGE=${PG_IMAGE}
+ODOO_HTTP_PORT=${HTTP_PORT}
+ODOO_CHAT_PORT=${CHAT_PORT}
+POSTGRES_EXTERNAL_PORT=${DB_PORT}
+POSTGRES_USER=${POSTGRES_USER}
+POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+POSTGRES_DB=${POSTGRES_DB}
+SHARED_BUFFERS=${SHARED_BUFFERS}
+EFFECTIVE_CACHE_SIZE=${EFFECTIVE_CACHE_SIZE}
+WORK_MEM=${WORK_MEM}
+MAINTENANCE_WORK_MEM=${MAINTENANCE_WORK_MEM}
+ENV
+  chmod 600 "$TARGET_DIR/.env"
+
+  ensure_proxy_network
+  cat > "$TARGET_DIR/compose.yaml" <<COMPOSE
+services:
+  db:
+    image: ${PG_IMAGE}
+    container_name: voltach-db-${INSTANCE_NAME}
+    restart: unless-stopped
+    command: >
+      postgres
+        -c shared_buffers=${SHARED_BUFFERS}
+        -c effective_cache_size=${EFFECTIVE_CACHE_SIZE}
+        -c work_mem=${WORK_MEM}
+        -c maintenance_work_mem=${MAINTENANCE_WORK_MEM}
+        -c max_connections=200
+        -c random_page_cost=1.1
+        -c checkpoint_completion_target=0.9
+        -c wal_buffers=16MB
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - ./db_data:/var/lib/postgresql/data
+      - ./init-db:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "127.0.0.1:${DB_PORT}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 15s
+    networks:
+      - internal
+
+  web:
+    image: ${ODOO_IMAGE}
+    container_name: voltach-odoo-${INSTANCE_NAME}
+    restart: unless-stopped
+    command: ["--config", "/etc/odoo/odoo.conf"]
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      HOST: db
+      PORT: "5432"
+      USER: ${POSTGRES_USER}
+      PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${HTTP_PORT}:8069"
+      - "${CHAT_PORT}:8072"
+    volumes:
+      - ./etc/odoo.conf:/etc/odoo/odoo.conf:ro
+      - ./etc/addons/${ODOO_VER_DOT}:/mnt/extra-addons/${ODOO_VER_DOT}
+      - ./data:/var/lib/odoo
+    networks:
+      - internal
+      - ${PROXY_NETWORK}
+
+networks:
+  internal:
+    internal: true
+  ${PROXY_NETWORK}:
+    external: true
+COMPOSE
+
+  (cd "$TARGET_DIR" && docker compose config >/dev/null)
+  info "Starting ${INSTANCE_NAME}..."
+  (cd "$TARGET_DIR" && docker compose pull && docker compose up -d)
+  unset ODOO_MASTER_HASH ODOO_MASTER_PASSWORD POSTGRES_PASSWORD
+  success "Odoo instance started."
+}
+
+install_cli() {
+  cat > "${GLOBAL_BIN}/${CLI_NAME}" <<'CLI'
+#!/usr/bin/env bash
+set -euo pipefail
+BASE="/opt/voltach-odoo/instances"
+cmd="${1:-list}"; inst="${2:-}"
+all(){ [[ -d "$BASE" ]] && find "$BASE" -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort || true; }
+req(){ [[ -n "$inst" && -d "$BASE/$inst" ]] || { echo "Instance not found: ${inst:-<none>}" >&2; echo "Available:"; all; exit 1; }; }
+ev(){ grep -E "^${1}=" "$BASE/$2/.env" 2>/dev/null | cut -d= -f2- || true; }
+case "$cmd" in
+  list)
+    printf '%-24s %-8s %-8s %-8s %s\n' INSTANCE VERSION HTTP CHAT STATUS
+    while read -r x; do
+      [[ -n "$x" ]] || continue
+      s="stopped"; docker ps --format '{{.Names}}' | grep -qx "voltach-odoo-$x" && s="running"
+      printf '%-24s %-8s %-8s %-8s %s\n' "$x" "$(ev ODOO_VERSION "$x")" "$(ev ODOO_HTTP_PORT "$x")" "$(ev ODOO_CHAT_PORT "$x")" "$s"
+    done < <(all)
+    ;;
+  ps) docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}' | grep -E 'voltach-(odoo|db)-|NAMES' ;;
+  start|stop|restart) req; (cd "$BASE/$inst" && docker compose "$cmd") ;;
+  logs) req; (cd "$BASE/$inst" && docker compose logs -f --tail=200) ;;
+  info)
+    req
+    echo "Instance: $inst"
+    echo "Odoo:     $(ev ODOO_VERSION "$inst")"
+    echo "HTTP:     $(ev ODOO_HTTP_PORT "$inst")"
+    echo "Chat:     $(ev ODOO_CHAT_PORT "$inst")"
+    echo "DB local: 127.0.0.1:$(ev POSTGRES_EXTERNAL_PORT "$inst")"
+    echo "Addons:   $BASE/$inst/etc/addons/$(ev ODOO_VER_DOT "$inst")"
+    echo "Config:   $BASE/$inst/etc/odoo.conf"
+    echo "Secrets:  $BASE/$inst/secrets (root only)"
+    ;;
+  backup)
+    req
+    ts="$(date +%Y%m%d_%H%M%S)"; b="$BASE/$inst/backups"; mkdir -p "$b"
+    u="$(ev POSTGRES_USER "$inst")"
+    docker exec "voltach-db-$inst" pg_dumpall -U "$u" > "$b/db_$ts.sql"
+    tar -czf "$b/backup_${inst}_${ts}.tar.gz" -C "$BASE/$inst" data etc "backups/db_$ts.sql"
+    rm -f "$b/db_$ts.sql"
+    echo "$b/backup_${inst}_${ts}.tar.gz"
+    ;;
+  *) echo "Usage: voltach-odoo {list|ps|start|stop|restart|logs|info|backup} [instance]" ;;
+esac
+CLI
+  chmod +x "${GLOBAL_BIN}/${CLI_NAME}"
+  ln -sf "${GLOBAL_BIN}/${CLI_NAME}" "${GLOBAL_BIN}/vodoo"
+  success "Management CLI installed: voltach-odoo (alias: vodoo)."
+}
+
+server_ip() {
+  curl -s -4 --max-time 3 ifconfig.me 2>/dev/null || hostname -I | awk '{print $1}'
+}
+
+summary() {
+  local ip; ip="$(server_ip)"
+  echo
+  echo -e "${GREEN}${BOLD}Installation complete.${NC}"
+  [[ $INSTALL_WEBMIN -eq 1 ]] && echo "Webmin:                https://${ip}:10000"
+  [[ $INSTALL_NPM -eq 1 ]] && echo "NGINX Proxy Manager:   http://${ip}:81"
+  [[ $INSTALL_PORTAINER -eq 1 ]] && echo "Portainer:             https://${ip}:9443"
+  if [[ $INSTALL_ODOO -eq 1 ]]; then
+    echo "Odoo ${ODOO_VERSION}:              http://${ip}:${HTTP_PORT}"
+    echo "Instance:              ${INSTANCE_NAME}"
+    echo "Root:                  ${TARGET_DIR}"
+    echo "Custom addons:         ${TARGET_DIR}/etc/addons/${ODOO_VER_DOT}/"
+    echo "PostgreSQL:            17 + pgvector (loopback ${DB_PORT})"
+    echo "Manage:                voltach-odoo list"
+  fi
+  echo "Log:                   ${LOG_FILE}"
+  echo
+}
+
+main() {
+  banner
+  preflight
+  apt_prepare
+  install_docker
+  install_webmin
+  install_npm
+  install_portainer
+  if [[ $INSTALL_ODOO -eq 1 ]]; then
+    select_odoo
+    create_instance
+    install_cli
+  fi
+  summary
+}
+
+main "$@"
