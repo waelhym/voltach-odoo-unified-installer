@@ -10,7 +10,7 @@
 set -Eeuo pipefail
 IFS=$'\n\t'
 
-VERSION="1.0.0"
+VERSION="1.1.0"
 LOG_FILE="/var/log/voltach-unified-installer.log"
 BASE_DIR="/opt/voltach-odoo"
 INSTANCES_DIR="${BASE_DIR}/instances"
@@ -437,6 +437,51 @@ create_instance() {
   chown -R "$odoo_uid:$odoo_gid" "$TARGET_DIR/data"
   chmod 750 "$TARGET_DIR/data"
 
+  # Install a tiny backend safety addon which clears stale web_tour state
+  # from browser localStorage. This prevents TourInteractive errors after
+  # reinstallations, upgrades, or interrupted onboarding tours.
+  local bootstrap_addon="$TARGET_DIR/etc/addons/${ODOO_VER_DOT}/voltach_bootstrap_fix"
+  mkdir -p "$bootstrap_addon/static/src/js"
+  cat > "$bootstrap_addon/__init__.py" <<'PY'
+# Voltach bootstrap browser-state fix
+PY
+  cat > "$bootstrap_addon/__manifest__.py" <<'PY'
+{
+    "name": "Voltach Bootstrap Fix",
+    "version": "1.0.0",
+    "summary": "Clears stale Odoo onboarding tour state",
+    "depends": ["web"],
+    "assets": {
+        "web.assets_backend": [
+            "voltach_bootstrap_fix/static/src/js/clear_tour_state.js",
+        ],
+    },
+    "installable": True,
+    "application": False,
+    "license": "LGPL-3",
+}
+PY
+  cat > "$bootstrap_addon/static/src/js/clear_tour_state.js" <<'JS'
+/** @odoo-module **/
+
+const TOUR_KEYS = [
+    "current_tour",
+    "current_tour.config",
+    "current_tour.index",
+    "current_tour.on_error",
+];
+
+for (const key of TOUR_KEYS) {
+    try {
+        localStorage.removeItem(key);
+    } catch {
+        // Ignore browsers/storage contexts where localStorage is unavailable.
+    }
+}
+JS
+  chown -R "$odoo_uid:$odoo_gid" "$bootstrap_addon"
+  chmod -R a+rX "$bootstrap_addon"
+
   printf '%s\n' "$POSTGRES_PASSWORD" > "$TARGET_DIR/secrets/postgresql_password"
   printf '%s\n' "$ODOO_MASTER_PASSWORD" > "$TARGET_DIR/secrets/odoo_master_password"
   chmod 600 "$TARGET_DIR/secrets/"*
@@ -601,7 +646,7 @@ COMPOSE
 
   info "Disabling interactive tours in ${INITIAL_DB_NAME}..."
   printf "%s\n" \
-    "m=env.registry.models.get('web_tour.tour'); m and env['web_tour.tour'].search([]).write({'active': False}); u=env['res.users'].search([]); 'tour_enabled' in u._fields and u.write({'tour_enabled': False}); env.cr.commit()" \
+    "m=env.registry.models.get('web_tour.tour'); m and env['web_tour.tour'].search([]).write({'active': False}); u=env['res.users'].search([]); 'tour_enabled' in u._fields and u.write({'tour_enabled': False}); env['ir.attachment'].search([('url','like','/web/assets/%')]).unlink(); env.cr.commit()" \
     | (
         cd "$TARGET_DIR"
         docker compose run --rm --no-deps -T web           odoo shell --config /etc/odoo/odoo.conf -d "$INITIAL_DB_NAME" --no-http
