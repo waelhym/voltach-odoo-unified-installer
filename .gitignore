@@ -1,0 +1,28 @@
+# Secrets / environment
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+secrets/
+
+# Backups / databases
+backups/
+*.dump
+*.sql
+*.sql.gz
+*.backup
+*.tar.gz
+
+# Odoo runtime data
+filestore/
+sessions/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+*.log
