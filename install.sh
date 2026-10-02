@@ -290,7 +290,8 @@ port_in_use() {
 }
 
 allocate_ports() {
-  local ver="$1" http_base=$((8000 + ver)) chat_base=$((9000 + ver)) db_base=$((5400 + ver - 10)) n=0
+  local ver="$1"
+  local http_base=$((8000 + ver)) chat_base=$((9000 + ver)) db_base=$((5400 + ver - 10)) n=0
   while (( n <= 99 )); do
     local h=$((http_base + n * 10)) c=$((chat_base + n * 10)) d=$((db_base + n))
     if ! port_in_use "$h" && ! port_in_use "$c" && ! port_in_use "$d"; then
